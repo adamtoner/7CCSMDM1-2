@@ -1,0 +1,18 @@
+AUTHOR: ADAM TONER
+DATE_CREATED: 30 MAR 2021
+PROJECT_TITLE: 7CCSMDM1 COURSEWORK 1
+PYTHON_VERSION: 3.8.5
+
+main.py
+    This is the only file that needs to be run to generate the report.
+    imports prt1.py and prt2.py
+    imports reportlab which is used to make the report
+    constructs, builds and saves the report
+
+prt1.py
+    Answers the questions in section 1 of the coursework
+    prepares answers for use by main.py
+
+prt2.py
+    Answers the questions in section 2 of the coursework
+    prepares answers for use by main.py
