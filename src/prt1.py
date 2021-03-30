@@ -18,12 +18,7 @@ DATA_DIR = FILE_DIR + '/../data/text_data/'
 DATA_FILE = 'Corona_NLP_train.csv'
 
 ######################## MAIN ########################
-def load_tweets( tweet_file ):
-    # read in tweets with pandas using the ISO-8859-1 encoding as UTF-8 was causing problems
-    tweet_df = pd.read_csv( tweet_file, encoding = "ISO-8859-1" )
-    return tweet_df
-    
-df = load_tweets( DATA_DIR + DATA_FILE )
+df = pd.read_csv( DATA_DIR + DATA_FILE, encoding = "ISO-8859-1" )
 
 if DEBUGGING: 
     print( len( df ))
