@@ -78,12 +78,13 @@ print( f'\nWith stop words, there are { len( corpus ) } words total, { len( corp
 print( f'The ten most frequently used words are: { ", ".join(corpus.value_counts()[:10].index.tolist()) }')
 
 # Remove the stop words from the corpus
-corpus = corpus[(corpus.str.len() > 2)]
-print( f'\nWithout stop words, there are { len( corpus.unique() ) } words total, { len( corpus.unique() ) } of which are unique.' )
-print( f'The ten most frequently used (non-stop) words are: { ", ".join(corpus.value_counts()[:10].index.tolist()) }')
+nscorpus = corpus[(corpus.str.len() > 2)]
+print( f'\nWithout stop words, there are { len( nscorpus ) } words total, { len( nscorpus.unique() ) } of which are unique.' )
+print( f'The ten most frequently used (non-stop) words are: { ", ".join( nscorpus.value_counts()[:10].index.tolist()) }')
 
 ######################## SECTION 1.3 ########################
 time_check( 'Start 1.3' )
+print( corpus.value_counts().sort_values( ascending = True ) )
 
 ######################## SECTION 1.4 ########################
 time_check( 'Start 1.4' )
