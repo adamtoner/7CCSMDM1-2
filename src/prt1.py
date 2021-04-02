@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 import collections
+import matplotlib.pyplot as plt
 
 start = time.time() #start the timer
 
@@ -84,7 +85,12 @@ print( f'The ten most frequently used (non-stop) words are: { ", ".join( nscorpu
 
 ######################## SECTION 1.3 ########################
 time_check( 'Start 1.3' )
-print( corpus.value_counts().sort_values( ascending = True ) )
+freq = corpus.value_counts().sort_values( ascending=[ True ])
+#yAxis = range( len( freq ) )
+#xAxis = freq.index.tolist()
+print( freq )
+freq.plot.line().get_figure().savefig(OUT_DIR + 'plot2.png')
+
 
 ######################## SECTION 1.4 ########################
 time_check( 'Start 1.4' )
