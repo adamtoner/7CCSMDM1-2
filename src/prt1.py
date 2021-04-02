@@ -11,7 +11,8 @@ import time
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
-import sklearn.datasets
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
 
 
 start = time.time() #start the timer
@@ -90,3 +91,16 @@ freq.plot.line().get_figure().savefig(OUT_DIR + 'plot.png')
 
 ######################## SECTION 1.4 ########################
 time_check( 'Start 1.4' )
+vec = CountVectorizer()
+print( tdf.Tweet )
+print( np.array( tdf.Tweet ))
+X = vec.fit_transform( np.array( tdf.Tweet ))
+y = np.array( tdf[ 'Sentiment' ])
+print( X )
+print( y )
+mnb = MultinomialNB()
+y_pred = mnb.fit( X, y )
+y_test = mnb.predict( X )
+print( f'\nThe error rate of the classifier is { round( (y != y_test).sum() / X.shape[0] * 100, 2 ) }%.' )
+
+time_check( 'Final runtime' )

@@ -14,7 +14,6 @@ import skimage.feature as feature
 import skimage.segmentation as segmentation
 import skimage.transform as transform
 import scipy.ndimage as ndi
-from sklearn.cluster import KMeans
 import imageio
 import matplotlib.pyplot as plt
 
@@ -79,8 +78,8 @@ plt.savefig( OUT_DIR + 'im_rgt_canny.png' )
 plt.close()
 
 for line in transform.probabilistic_hough_line( edges, line_length = 50, line_gap = 5 ):
-    p0, p1 = line
-    plt.plot(( p0[0], p1[0] ), ( p0[1], p1[1] ))
+    x, y = line
+    plt.plot(( x[0], y[0] ), ( x[1], y[1] ))
 plt.xlim(( 0, im_rgt_gray.shape[1] ))
 plt.ylim(( im_rgt_gray.shape[0], 0 ))
 plt.savefig( OUT_DIR + 'im_rgt_hough.png' )
