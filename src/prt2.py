@@ -12,9 +12,11 @@ import math
 import os
 import csv
 import numpy as np
+from scipy.ndimage.filters import gaussian_filter
 import skimage.color as color
 import skimage.filters as filters
-import scipy
+import skimage.util as util
+import scipy.ndimage as ndi
 import imageio
 import matplotlib.pyplot as plt
 
@@ -43,8 +45,21 @@ plt.imshow( binary_img, cmap=plt.cm.gray, interpolation='nearest' )
 plt.savefig( OUT_DIR + 'avengers_imdb_bw.png' )
 
 ######################## SECTION 2.2 ########################
+im_bhw_noise = util.random_noise( im_bhw, mode = 'gaussian', seed = None, clip = True, var = 0.1 )
+plt.imshow( im_bhw_noise )
+plt.savefig( OUT_DIR + 'im_bhw_noise.png' )
 
+im_bhw_gfilter = filters.gaussian( im_bhw_noise, sigma = 1 )
+plt.imshow( im_bhw_gfilter )
+plt.savefig( OUT_DIR + 'im_bhw_gfilter.png' )
 
+im_bhw_ufilter = ndi.uniform_filter( im_bhw_noise, size = 9 )
+plt.imshow( im_bhw_ufilter )
+plt.savefig( OUT_DIR + 'im_bhw_ufilter.png' )
+
+im_bhw_bfilter = ndi.uniform_filter( im_bhw_gfilter, size = 9 )
+plt.imshow( im_bhw_bfilter )
+plt.savefig( OUT_DIR + 'im_bhw_bfilter.png' )
 
 ######################## SECTION 2.3 ########################
 
