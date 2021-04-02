@@ -18,7 +18,7 @@ import imageio
 import matplotlib.pyplot as plt
 
 # Set the literals for the file
-DEBUGGING = True
+DEBUGGING = False
 FILE_DIR = os.path.dirname(__file__)
 OUT_DIR = FILE_DIR + '/../output/'
 DATA_DIR = FILE_DIR + '/../data/image_data/'
@@ -31,7 +31,8 @@ im_fcg = imageio.imread( DATA_DIR + 'forestry_commission_gov_uk.jpg' )
 im_rgt = imageio.imread( DATA_DIR + 'rolland_garros_tv5monde.jpg' )
 
 ######################## SECTION 2.1 ########################
-print( im_ave.shape )
+if DEBUGGING: 
+    print( im_ave.shape )
 im_ave_gray = color.rgb2gray( im_ave )
 plt.imshow( im_ave_gray, cmap="gray" )
 plt.savefig( OUT_DIR + 'avengers_imdb_grayscale.png' )

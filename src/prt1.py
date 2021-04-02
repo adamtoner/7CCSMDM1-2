@@ -19,7 +19,7 @@ start = time.time() #start the timer
 
 # Set the literals for the file
 DEBUGGING = False
-TIMING = True
+TIMING = False
 FILE_DIR = os.path.dirname(__file__)
 OUT_DIR = FILE_DIR + '/../output/'
 DATA_DIR = FILE_DIR + '/../data/text_data/'
@@ -41,12 +41,17 @@ def cp_time( id ):
 ######################## SECTION 1.1 ########################
 time_check( 'Start 1.1' )
 
-# Print the number of unique sentiments.
-print( f'There are { len( tdf.Sentiment.value_counts() ) } possible sentiments that a tweet may have.' )
-# Find the second most popular sentiment in the tweets.
-print( f'The second most popular tweet sentiment is { tdf.Sentiment.value_counts().index[1] }.' )
-# Find the date with the greates number of extremely positive tweets.
-print( f'The day with the most extremely positive tweets was { tdf[tdf[ "Sentiment" ] == "Extremely Positive"].TweetAt.value_counts().index[0] }.' )
+no_sentiments = len( tdf.Sentiment.value_counts() )
+sec_sentiment = tdf.Sentiment.value_counts().index[1]
+mc_date = tdf[tdf[ "Sentiment" ] == "Extremely Positive"].TweetAt.value_counts().index[0]
+
+if DEBUGGING:
+    # Print the number of unique sentiments.
+    print( f'There are { len( tdf.Sentiment.value_counts() ) } possible sentiments that a tweet may have.' )
+    # Find the second most popular sentiment in the tweets.
+    print( f'The second most popular tweet sentiment is { tdf.Sentiment.value_counts().index[1] }.' )
+    # Find the date with the greates number of extremely positive tweets.
+    print( f'The day with the most extremely positive tweets was { tdf[tdf[ "Sentiment" ] == "Extremely Positive"].TweetAt.value_counts().index[0] }.' )
 
 tdf[ 'Tweet' ] = tdf[ 'OriginalTweet' ].str.lower()
 tdf[ 'Tweet' ] = tdf[ 'Tweet' ].str.replace( '[^a-zA-Z]', ' ' )
@@ -73,34 +78,39 @@ checkpoint = time.time()
 tdf[ 'Tokens' ] = tdf.Tweet.str.split()
 checkpoint = cp_time( checkpoint )
 corpus = pd.Series( ' '.join(tdf[ 'Tweet' ]).split() )
+nscorpus = corpus[(corpus.str.len() > 2)]
+
 checkpoint = cp_time( checkpoint )
 
-# Print the number of words in the corpus
-print( f'\nWith stop words, there are { len( corpus ) } words total, { len( corpus.unique() ) } of which are unique.' )
-print( f'The ten most frequently used words are: { ", ".join(corpus.value_counts()[:10].index.tolist()) }')
-
-# Remove the stop words from the corpus
-nscorpus = corpus[(corpus.str.len() > 2)]
-print( f'\nWithout stop words, there are { len( nscorpus ) } words total, { len( nscorpus.unique() ) } of which are unique.' )
-print( f'The ten most frequently used (non-stop) words are: { ", ".join( nscorpus.value_counts()[:10].index.tolist()) }')
+if DEBUGGING:
+    # Print the number of words in the corpus
+    print( f'\nWith stop words, there are { len( corpus ) } words total, { len( corpus.unique() ) } of which are unique.' )
+    print( f'The ten most frequently used words are: { ", ".join(corpus.value_counts()[:10].index.tolist()) }')
+    # Remove the stop words from the corpus
+    print( f'\nWithout stop words, there are { len( nscorpus ) } words total, { len( nscorpus.unique() ) } of which are unique.' )
+    print( f'The ten most frequently used (non-stop) words are: { ", ".join( nscorpus.value_counts()[:10].index.tolist()) }')
 
 ######################## SECTION 1.3 ########################
 time_check( 'Start 1.3' )
 freq = corpus.value_counts().sort_values( ascending=[ True ])
 freq.plot.line().get_figure().savefig(OUT_DIR + 'plot.png')
 
+nfreq = corpus[(corpus.str.len() > 2)].value_counts().sort_values( ascending=[ True ])
+nfreq.plot.line().get_figure().savefig(OUT_DIR + 'plot2.png')
+
 ######################## SECTION 1.4 ########################
 time_check( 'Start 1.4' )
 vec = CountVectorizer()
-print( tdf.Tweet )
-print( np.array( tdf.Tweet ))
+
 X = vec.fit_transform( np.array( tdf.Tweet ))
 y = np.array( tdf[ 'Sentiment' ])
-print( X )
-print( y )
+
 mnb = MultinomialNB()
 y_pred = mnb.fit( X, y )
 y_test = mnb.predict( X )
-print( f'\nThe error rate of the classifier is { round( (y != y_test).sum() / X.shape[0] * 100, 2 ) }%.' )
+classifier_error = round( (y != y_test).sum() / X.shape[0] * 100, 2 )
+if DEBUGGING:
+    print( f'\nThe error rate of the classifier is { classifier_error }%.' )
 
 time_check( 'Final runtime' )
+runtime = round( time.time() - start, 2)
